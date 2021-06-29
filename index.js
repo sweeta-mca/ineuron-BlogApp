@@ -3,6 +3,7 @@ const app =express();
 const path = require('path');
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
+const postRoutes = require('./routes/post.routes');
 const publicRoutes = require('./routes/public.routes');
 const { urlencoded } = require('express');
 
@@ -14,8 +15,8 @@ app.use('/static',express.static(path.join(__dirname, 'public')))
 
 app.use(session({
     secret:'secret@1234',
-    resave:false,
-    saveUninitialized:false,
+    resave:true,
+    saveUninitialized:true,
     store: new FileStore({
         retries:0
 })
@@ -24,6 +25,7 @@ app.use(session({
 app.use(express.json());
 app.use(urlencoded({extended:false}))
 
+app.use('/posts',postRoutes);
 app.use('/',publicRoutes);
 
 app.get('/favicon.ico', function(req, res) { 

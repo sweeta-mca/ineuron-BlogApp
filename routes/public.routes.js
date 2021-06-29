@@ -2,20 +2,20 @@ const router = require('express').Router();
 const UserModel  = require('../model/user.model');
 
 router.get('/', function(req,res){
-    console.log(req.session)
-    res.render('pages/home'); // path inside views folder. ./views/pages/home.ejs
+    
+    res.render('pages/home',{username:req.session.username}); // path inside views folder. ./views/pages/home.ejs
 });
 
 router.get('/about', function(req,res){
-    res.render('pages/about');
+    res.render('pages/about',{username:req.session.username});
 });
 
 router.get('/signin', function(req,res){
-    res.render('pages/signin'); // path inside views folder. ./views/pages/home.ejs
+    res.render('pages/signin',{username:req.session.username}); // path inside views folder. ./views/pages/home.ejs
 });
 
 router.get('/signup', function(req,res){
-    res.render('pages/signup');
+    res.render('pages/signup',{username:req.session.username});
 });
 
 router.post('/signin', async (req,res)=>{
@@ -28,29 +28,30 @@ router.post('/signin', async (req,res)=>{
     {
         // store data in the session
     req.session.username = req.body.username;
-    res.redirect('/');
+    res.render('pages/home',{username:req.session.username});
     }
     //TODO : username and password is incorrect
-    
+    //res.send("Invalid user")
 });
 
 router.post('/signup', async (req,res) => {
     const {username,mobile,email,password} = req.body;
     //TODO : validate the data
     //TODO : check user name is present already
-    var isPresent = await UserModel.isValidUsername(username.toLowerCase());
+    var isPresent = await UserModel.isValidUsername(username);
     if(isPresent)
     {
         //TODO : Notify user that username is present
-        return;
+        res.send("Username available");
     } 
     //TODO: register the user 
     await UserModel.create({...req.body,username:username.toLowerCase()});
     //TODO: Start session
     req.session.username = username;
     // redirect the user to home page  
-    res.redirect('/');
+    res.render('pages/home',{username:req.session.username});
 });
+
 
 router.get('/logout', (req,res) => {
     req.session.destroy();

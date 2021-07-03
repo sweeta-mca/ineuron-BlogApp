@@ -14,9 +14,6 @@
         <li class="nav-item <%= path =='/about' ? 'active' : '' %>">
           <a class="nav-link" href="/about">About</a>
         </li>
-        <li class="nav-item >
-          <span><%= username %></span>
-        </li>
         <%
           if(username){  %>
             <li class="nav-item <%= path =='/posts' ? 'active' : '' %>">
@@ -31,7 +28,7 @@
           { 
         %>
         <li class="nav-item <%= path =='/signup' ? 'active' : '' %>">
-          <a class="nav-link" href="/signup">Sign Up</a>
+            <a class="nav-link" href="/signup">Sign Up</a>
         </li>
         <li class="nav-item <%= path =='/signin' ? 'active' : '' %>">
             <a class="nav-link" href="/signin">Sign In</a>

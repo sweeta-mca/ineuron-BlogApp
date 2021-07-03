@@ -1,10 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <%- include('../partials/head.ejs', {title:'Posts'}) %>
-    </head>
-    <body>
-        <%- include('../partials/nav.ejs',{path:'/posts', username:username})%>
-        <h1>My Posts</h1>
-    </body>
+  <head>
+    <%- include('../partials/head.ejs', {title:'Posts'}) %>
+  </head>
+  <body>
+    <%- include('../partials/nav.ejs',{path:'/posts', username:username})%>
+    <h1>My Posts</h1>
+    <div class="container">
+      <div class="row">
+        <% if (posts.length ==0) { %>
+        <div class="col-md-4" style="text-align: center; margin-top: 30px">
+          <h1>No Posts yet</h1>
+          <a href="/posts/create" class="btn btn-primary">Create Post</a>
+        </div>
+        <% } %> <% for( let index = 0; index < posts.length; index++ ) { %>
+         <%- include('../partials/postItem.ejs',{post: posts[index]}) %> <% } %>
+      </div>
+    </div>
+  </body>
 </html>

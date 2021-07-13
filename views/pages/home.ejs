@@ -5,5 +5,13 @@
     </head>
     <body>
         <%- include('../partials/nav.ejs',{path:'/', username:username})%>
+        <div class="container">
+            <div class="row">               
+          <% for( let index = 0; index < posts.length; index++ ) { %>
+           <%- include('../partials/postItem.ejs',{post: posts[index]}) %> <% } %>
+        </div>
+            </div>
+        </div>
     </body>
+
 </html>

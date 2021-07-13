@@ -3,6 +3,8 @@ const authMiddleware =require('../middleware/auth.middleware');
 const multer = require('multer');
 const postModel = require('../model/post.model');
 const { readFile } = require('../helper/file.helper');
+const postAuthorization = require('../middleware/postAuthorization.middleware')
+
 
 // for upload files with form enctype="multipart/formData" using multer library
 var storage = multer.diskStorage({
@@ -22,8 +24,8 @@ var upload = multer({storage:storage});
 router.use(authMiddleware);
 
 router.get('/', (req,res)=>{
-  postModel.getAllPostsByUser(req.session.username).then(posts => {
-    res.render('pages/posts',{username:req.session.username,posts:posts});
+  postModel.findAllByUser(req.session.username).then(posts => {
+    res.render('pages/posts',{posts:posts});
   })
   .catch(err => {
     console.log(err)
@@ -40,9 +42,35 @@ router.post('/create',upload.single('image'),async (req,res)=>{
     var {title,description} = req.body;
     var filename = req.file.filename;
     var author = req.session.username;
-    await postModel.createPost(title,description,author,filename) ;  
+    await postModel.create(title,description,author,filename) ;  
     res.redirect("/posts");
 });
 
+router.get('/edit/:id',(req,res) => {
+  var {id} = req.params;
+  postModel.findById(id)
+  .then(post => {
+    return res.render("pages/editPost",{
+      post : post
+    })
+  })
+});
+
+
+router.post('/edit/:id' , postAuthorization, (req,res) => {
+  var {title,description} = req.body;
+  var {id} = req.params;
+
+  postModel.update(id,title,description)
+  .then(_ => res.redirect('/posts'))
+  .catch(err => console.log(err))
+});
+
+router.get('/delete/:id',postAuthorization, (req,res)=>{
+  var {id} =req.params;
+  postModel.remove(id)
+  .then(_ => res.redirect('/posts'))
+  .catch(err => console.log(err))
+});
 
 module.exports =router;

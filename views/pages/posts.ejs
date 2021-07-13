@@ -9,11 +9,14 @@
     <div class="container">
       <div class="row">
         <% if (posts.length ==0) { %>
-        <div class="col-md-4" style="text-align: center; margin-top: 30px">
-          <h1>No Posts yet</h1>
+        <div class="col-md-4" style="text-align: center; margin-top: 30px;">
+          <h1>No Posts yet</h1>          
+        </div>       
+        <% } %> 
+        <div class="col-md-12" style="text-align: center; margin-top: 30px;">
           <a href="/posts/create" class="btn btn-primary">Create Post</a>
         </div>
-        <% } %> <% for( let index = 0; index < posts.length; index++ ) { %>
+        <% for( let index = 0; index < posts.length; index++ ) { %>
          <%- include('../partials/postItem.ejs',{post: posts[index]}) %> <% } %>
       </div>
     </div>
